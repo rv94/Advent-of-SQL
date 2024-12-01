@@ -2074,17 +2074,18 @@ select 	c."name",
 		case 	when tc1.difficulty_to_make = 1 then 'Simple Gift'
 				when tc1.difficulty_to_make = 2 then 'Moderate Gift'
 				when tc1.difficulty_to_make >= 3 then 'Complex Gift' end as gift_complexity_primary,
-		case 	when tc2.difficulty_to_make = 1 then 'Simple Gift'
-				when tc2.difficulty_to_make = 2 then 'Moderate Gift'
-				when tc2.difficulty_to_make >= 3 then 'Complex Gift' end as gift_complexity_secondary,
-		null as gift_complexity,
+--		tc2.difficulty_to_make,
+--		case 	when tc2.difficulty_to_make = 1 then 'Simple Gift'
+--				when tc2.difficulty_to_make = 2 then 'Moderate Gift'
+--				when tc2.difficulty_to_make >= 3 then 'Complex Gift' end as gift_complexity_secondary,
+--		null as gift_complexity,
 		case 	when tc1.category = 'outside' then 'Outside Workshop'
 				when tc1.category = 'educational' then 'Learning Workshop'
-				else 'General Workshop' end as workshop_assignment_primary,
-		case 	when tc1.category = 'outside' then 'Outside Workshop'
-				when tc1.category = 'educational' then 'Learning Workshop'
-				else 'General Workshop' end as workshop_assignment_secondary,
-		null as workshop_assignment
+				else 'General Workshop' end as workshop_assignment_primary
+--		case 	when tc1.category = 'outside' then 'Outside Workshop'
+--				when tc1.category = 'educational' then 'Learning Workshop'
+--				else 'General Workshop' end as workshop_assignment_secondary,
+--		null as workshop_assignment
 from children c 
 join wish_lists wl 
 	on c.child_id = wl.child_id

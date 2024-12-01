@@ -1,3 +1,5 @@
+-----------------------------INPUT DATA-------------------------
+
 DROP TABLE IF EXISTS children CASCADE;
 DROP TABLE IF EXISTS wish_lists CASCADE;
 DROP TABLE IF EXISTS toy_catalogue CASCADE;
@@ -2045,3 +2047,49 @@ INSERT INTO toy_catalogue VALUES
 (18, 'Hula hoops', 'outdoor', 1),
 (19, 'Rubiks cubes', 'educational', 3),
 (20, 'Toy musical instruments', 'educational', 3);
+
+------------LOOKING AT TABLES AT HAND-----------------
+select *
+from children c 
+limit 100;
+
+select 	*,
+		wishes::json->'colors' as color
+from wish_lists wl 
+where 1=1
+and child_id = 515
+limit 100;
+
+select *
+from toy_catalogue tc 
+limit 100;
+
+--------------------------------QUESTION--------------
+select 	c."name",
+		--wl.child_id,
+		wl.wishes::json->>'first_choice' as primary_wish,
+		wl.wishes::json->>'second_choice' as backup_wish,
+		((wl.wishes::json->>'colors')::json)->>0 as favorite_color,
+		json_array_length((wl.wishes::json->>'colors')::json) as color_count,
+		case 	when tc1.difficulty_to_make = 1 then 'Simple Gift'
+				when tc1.difficulty_to_make = 2 then 'Moderate Gift'
+				when tc1.difficulty_to_make >= 3 then 'Complex Gift' end as gift_complexity_primary,
+		case 	when tc2.difficulty_to_make = 1 then 'Simple Gift'
+				when tc2.difficulty_to_make = 2 then 'Moderate Gift'
+				when tc2.difficulty_to_make >= 3 then 'Complex Gift' end as gift_complexity_secondary,
+		null as gift_complexity,
+		case 	when tc1.category = 'outside' then 'Outside Workshop'
+				when tc1.category = 'educational' then 'Learning Workshop'
+				else 'General Workshop' end as workshop_assignment_primary,
+		case 	when tc1.category = 'outside' then 'Outside Workshop'
+				when tc1.category = 'educational' then 'Learning Workshop'
+				else 'General Workshop' end as workshop_assignment_secondary,
+		null as workshop_assignment
+from children c 
+join wish_lists wl 
+	on c.child_id = wl.child_id
+join toy_catalogue tc1
+	on wl.wishes::json->>'first_choice' = tc1.toy_name
+join toy_catalogue tc2
+	on wl.wishes::json->>'second_choice' = tc2.toy_name
+order by c.name; 

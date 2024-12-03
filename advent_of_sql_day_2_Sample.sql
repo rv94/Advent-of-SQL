@@ -1,3 +1,34 @@
+----Sample results
+select 	*,
+		chr(value) as Decoded_Value
+from letters_a la; 
+
+select string_agg(s.ParsedString, '')
+from 
+(	select 	string_agg(chr(la.value), '') as ParsedString
+	from letters_a la
+	where 1=1
+	and (	(value between 65 and 90) or 	----Capital letters
+			(value between 97 and 122) or	----Small letters
+			(value between 32 and 34) or	----Exclamation, single, double quote
+			(value between 40 and 41) or	----Parentheses
+			(value between 44 and 46) or	----Comma, dash, dot
+			(value between 58 and 59) or	----Colons
+			(value = 63))					----?
+		
+	union all
+			
+	select 	string_agg(chr(lb.value), '')  as ParsedString
+	from letters_b lb
+	where 1=1
+	and (	(value between 65 and 90) or 	----Capital letters
+			(value between 97 and 122) or	----Small letters
+			(value between 32 and 34) or	----Exclamation, single, double quote
+			(value between 40 and 41) or	----Parentheses
+			(value between 44 and 46) or	----Comma, dash, dot
+			(value between 58 and 59) or	----Colons
+			(value = 63))) s
+
 -----------------------SAMPLE DATA----------------------
 -- Binky's Table
 CREATE TABLE letters_a (

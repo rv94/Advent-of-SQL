@@ -36,6 +36,7 @@ FROM employee_hierarchy
 order by level desc;
 
 -----------------Sample Data
+drop table if exists staff;
 CREATE TABLE staff (
     staff_id INT PRIMARY KEY,
     staff_name VARCHAR(100) NOT NULL,

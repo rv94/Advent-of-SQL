@@ -33,8 +33,7 @@ WITH t AS
 		    level,
 		    path::text,
 		    length(path::text),
-		    manager_id,
-		    concat(level, ',', manager_id)
+		    manager_id
 	FROM employee_hierarchy
 	order by level DESC)
 
